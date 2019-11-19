@@ -250,5 +250,20 @@ public function getInfosVisiteur($login, $mdp){
 		where fichefrais.idvisiteur = :idVisiteur and fichefrais.mois = :mois";
 		DB::update($req, ['etat'=>$etat, 'idVisiteur'=>$idVisiteur, 'mois'=>$mois]);
 	}
+
+/**
+ * Retourne les informations personnelles d'un visiteur
+ 
+ * @param $id 
+ * @return la ville et le cp sous la forme d'un objet 
+*/
+	public function getInfosPerso($id){
+		$req = "select cp, ville from visiteur where visiteur.id=:id";
+		$ligne = DB::select($req, ['id'=>$id]);
+		return $ligne[0];
+	}
+
+	
 }
+
 ?>
