@@ -264,6 +264,17 @@ public function getInfosVisiteur($login, $mdp){
 	}
 
 	
+/**
+ * 	Met à jour les informations saisies
+ * 
+ * @param $idVisiteur, $cp, $ville
+ */
+	public function majInfos($idVisiteur, $cp, $ville){
+
+		$req = "update visiteur set cp = :cp, ville = :ville where id = :id";
+		DB::update($req, ['cp'=>$cp, 'ville'=>$ville, 'id'=>$idVisiteur]);
+
+	}
 }
 
 ?>
