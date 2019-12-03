@@ -297,7 +297,7 @@ class GsbFrais
 	 * 
 	 * @param $idResponsable
 	 */
-	public function getListUsers($idResponsable)
+	public function getListVisiteurs($idResponsable)
 	{
 		$req = "SELECT nom, prenom, tra_role, tra_reg
 			FROM visiteur 
@@ -305,7 +305,7 @@ class GsbFrais
 			INNER JOIN region ON region.id = tra_reg 
 			WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)";
 		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable]);
-		return $LesLignes;
+		return $lesLignes;
 	}
 	/**
 	 * Récupère le rôle de l'utilisateur
@@ -313,8 +313,8 @@ class GsbFrais
 	 * @param $idVisiteur
 	 */
 	public function getVisiteurRole($idVisiteur) {
-		$req = "SELECT tra_role FROM travailler WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
-		$lesLignes = DB::select($req, ['idVisiteur' => $idVisiteur]);
-		return $lesLignes[0];
+		$req = "SELECT tra_role as role FROM travailler WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
+		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
+		return $ligne[0];
 	}
 }
