@@ -298,7 +298,7 @@ class GsbFrais
 	 */
 	public function getListVisiteurs($idResponsable)
 	{
-		$req = "SELECT nom, prenom, tra_role, tra_reg
+		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, tra_reg
 			FROM visiteur 
 			INNER JOIN travailler ON visiteur.id = idVisiteur 
 			INNER JOIN region ON region.id = tra_reg 

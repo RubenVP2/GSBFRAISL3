@@ -12,6 +12,7 @@
                     <th style="width:20%">Prénom</th> 
                     <th style="width:20%">Code region</th> 
                     <th style="width:20%">Role</th>
+                    <th style="width:20%">Modifier</th>
                 </tr>
             </thead>
             @foreach($info as $oneInfo)
@@ -20,6 +21,8 @@
                 <td> {{ $oneInfo->prenom }} </td> 
                 <td> {{ $oneInfo->tra_reg }} </td> 
                 <td> {{ $oneInfo->tra_role }} </td>
+                <td style="text-align:center;"><a href="{{ url('/modifOtherUser') }}/{{ $oneInfo->id }}">
+                        <span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" data-placement="top" title="Voir"></span></a></td>
             </tr>
             @endforeach
         </table>
