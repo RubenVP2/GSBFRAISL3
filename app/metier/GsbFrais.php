@@ -342,5 +342,15 @@ class GsbFrais
 		$req = "";
 	}
  }
+/**
+ * @author Ravaz Victor
+ * Permet de modifier sont mot de passe
+ * @param $mdp
+ *@return les nouveaux mots de passe
+ */
+ public function modifMotDePasse($mdp){
+	//Requête pour récupérer et modifier les mots de passe
+	$req ="";
+ }
 
 }
