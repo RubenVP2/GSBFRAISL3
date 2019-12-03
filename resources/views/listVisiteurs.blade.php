@@ -22,7 +22,7 @@
                 <td> {{ $oneInfo->tra_reg }} </td> 
                 <td> {{ $oneInfo->tra_role }} </td>
                 <td style="text-align:center;"><a href="{{ url('/modifOtherUser') }}/{{ $oneInfo->id }}">
-                        <span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" data-placement="top" title="Voir"></span></a></td>
+                        <span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="top" title="Voir"></span></a></td>
             </tr>
             @endforeach
         </table>

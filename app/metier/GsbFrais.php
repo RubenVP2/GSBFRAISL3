@@ -292,23 +292,26 @@ class GsbFrais
 		DB::update($req, ['cp' => $cp, 'ville' => $ville, 'id' => $idVisiteur]);
 	}
 	/**
+	 * @author Jolan Largeteau
 	 * Récupère la liste des utilisateurs dans le même secteur que le responsable
 	 * 
 	 * @param $idResponsable
 	 */
 	public function getListVisiteurs($idResponsable)
 	{
-		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, tra_reg
-			FROM visiteur 
-			INNER JOIN travailler ON visiteur.id = idVisiteur 
-			INNER JOIN region ON region.id = tra_reg 
-			WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)
-			AND visiteur.id != :idResponsable2
-			ORDER BY tra_role, nom, prenom";
+		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, tra_reg, tra_date
+				FROM visiteur 
+				INNER JOIN travailler ON visiteur.id = idVisiteur 
+				INNER JOIN region ON region.id = tra_reg 
+				INNER JOIN (SELECT max(tra_date) maxdate, idVisiteur FROM travailler GROUP BY idVisiteur) t2 ON travailler.idVisiteur = t2.idVisiteur AND travailler.tra_date = t2.maxdate
+				WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)
+				AND visiteur.id != :idResponsable2
+				ORDER BY tra_role, nom, prenom";
 		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable, 'idResponsable2' => $idResponsable]);
 		return $lesLignes;
 	}
 	/**
+	 * @author Jolan Largeteau
 	 * Récupère le rôle de l'utilisateur
 	 * 
 	 * @param $idVisiteur
@@ -318,28 +321,43 @@ class GsbFrais
 		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
 		return $ligne[0];
 	}
+/**
+ * @author Jolan Largeteau
+ * Récupère toutes les infos d'un autre utilisateur
+ * 
+ * @param $idOtherUser
+ */
+	public function getOtherUser($idOtherUser) {
+		$req = "SELECT * FROM travailler INNER JOIN visiteur on visiteur.id = idVisiteur WHERE idVisiteur = :idOtherUser ORDER BY tra_date DESC LIMIT 1";
+		$ligne = DB::select($req, ['idOtherUser' => $idOtherUser]);
+		return $ligne[0];
+	}
+
 
 /**
  * @author Ruben Veloso Paulos
  * Affiche les listes de frais en fonction du rôle du visiteur
  * @param $idVisiteur
- *@return les fiches de frais
+ * @return les fiches de frais
  */
 
- public function getLesFicheFraisVisiteur($idVisiteur) {
-	 // Récupère le role
-	$role = $this->getVisiteurRole($idVisiteur);
+ public function getLesFichesFraisVisiteur($idVisiteur, $role) {
 	// Test la valeur du rôle 
 	if ($role == 'Délégué') {
 		// Requête pour récupérer les visiteur pour 1 délégué
-		$req = "SELECT mois, nbJustificatifs, montantValide, dateModif 
+		$req = "SELECT f.idVisiteur, mois, nbJustificatifs, montantValide, dateModif 
 		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur
-		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur'";
+		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 2";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
-	} else {
+	} else if ($role == 'Responsable') {
 		// Requête pour récupérer les visiteur pour 1 délégué
-		$req = "";
+		$req = "SELECT f.idVisiteur, mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur inner join region r ON t.tra_reg = r.id
+		where f.idEtat like 'CL' 
+		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué'";
+		$ligne = DB::select($req, ['id'=>$idVisiteur]);
+		return $ligne;
 	}
  }
 /**

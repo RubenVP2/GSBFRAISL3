@@ -45,7 +45,12 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{{ url('/saisirFraisForfait') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Saisir Frais</a></li>
                         <li><a href="{{ url('/getListeFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Voir Frais</a></li>
+                        {{-- Si le role est Délégué ou responsable affiche le bouton valider fiche frais --}}
+                        @if (Session::get('role') == 'Responsable' || Session::get('role') == 'Délégué')
+                        <li><a href="{{ url('/validFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Valider Frais</a></li>
+                        @endif
                         <li><a href="{{ url('/modifInfos') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier les infos</a></li>
+                        {{-- Si le role est responsable affiche la liste des visiteurs  --}}
                         @if (Session::get('role') == 'Responsable')
                         <li><a href="{{ url('/listVisiteurs') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Liste des visiteurs</a></li>
                         @endif

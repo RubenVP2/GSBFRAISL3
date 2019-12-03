@@ -60,10 +60,24 @@ Route::get('/modifInfos', 'modifInfosController@affFormModifInfos');
 // Modifier Infos
 Route::post('/modifInfos', 'modifInfosController@verifInfos');
 
+// Liste les utilisateurs du même secteur que le responsable
 Route::get('/listVisiteurs', 'listVisiteursController@listVisiteurs');
+
+// Le responsable modifi les infos d'un utilisateur de son secteur
+Route::get('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@affFormModifOtherUser');
+
+Route::post('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@verifInfos');
+
+// Valider Frais
+Route::get('/validFrais', 'ValidFraisController@listFrais');
+
+// Voir detail pour valider frais
+Route::get('/validerDetailFrais/{mois}', 'ValidFraisController@voirDetailFrais');
+
+// Affiche la page Valider Frais avec un msg de confirmation si validation effectué
+Route::post('/validFrais', 'ValidFraisController@validerFicheFrais');
 
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
 });
-
