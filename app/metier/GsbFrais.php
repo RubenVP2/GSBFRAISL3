@@ -324,20 +324,25 @@ class GsbFrais
  *@return les fiches de frais
  */
 
- public function getLesFicheFraisVisiteur($idVisiteur) {
+ public function getLesFichesFraisVisiteur($idVisiteur) {
 	 // Récupère le role
 	$role = $this->getVisiteurRole($idVisiteur);
 	// Test la valeur du rôle 
 	if ($role == 'Délégué') {
 		// Requête pour récupérer les visiteur pour 1 délégué
-		$req = "SELECT mois, nbJustificatifs, montantValide, dateModif 
+		$req = "SELECT idVisiteur, mois, nbJustificatifs, montantValide, dateModif 
 		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur
-		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur'";
+		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 2";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
 	} else {
 		// Requête pour récupérer les visiteur pour 1 délégué
-		$req = "";
+		$req = "SELECT f.idVisiteur, mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur inner join region r ON t.tra_reg = r.id
+		where f.idEtat like 'CL' 
+		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué'";
+		$ligne = DB::select($req, ['id'=>$idVisiteur]);
+		return $ligne;
 	}
  }
 
