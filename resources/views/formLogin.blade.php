@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-3 control-label">Mot de passe : </label>
+            <label class="col-md-3 control-label">Mot de passe :: </label>
             <div class="col-md-6 col-md-3">
                 <input type="password" name="pwd" ng-model="pwd" class="form-control" placeholder="Votre mot de passe" required>
             </div>
