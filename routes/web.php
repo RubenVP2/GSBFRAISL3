@@ -60,7 +60,13 @@ Route::get('/modifInfos', 'modifInfosController@affFormModifInfos');
 // Modifier Infos
 Route::post('/modifInfos', 'modifInfosController@verifInfos');
 
+// Liste les utilisateurs du même secteur que le responsable
 Route::get('/listVisiteurs', 'listVisiteursController@listVisiteurs');
+
+// Le responsable modifi les infos d'un utilisateur de son secteur
+Route::get('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@affFormModifOtherUser');
+
+Route::post('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@verifInfos');
 
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
