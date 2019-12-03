@@ -6,18 +6,18 @@ use Illuminate\http\Request;
 use Illuminate\Support\Facades\Session;
 use App\metier\GsbFrais;
 
-class modifInfosController extends Controller {
+class modifOtherUserController extends Controller {
 
     /**
      * Initialise le formulaire avec les infos personnelles
      * @return vue formModifInfos
      */
-    public function affFormModifInfos() {
+    public function affFormModifOtherUser($idOtherUser) {
         $erreur = "";
         $idVisiteur = Session::get('id');
         $gsbFrais = new GsbFrais();
-        $info = $gsbFrais->getInfosPerso($idVisiteur);
-        return view('formModifInfos', compact('info', 'erreur'));
+        $info = $gsbFrais->getOtherUser($idOtherUser);
+        return view('formModifOtherUser', compact('info', 'erreur'));
     }
 
     public function verifInfos(Request $request) {

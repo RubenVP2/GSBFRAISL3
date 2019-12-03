@@ -292,21 +292,26 @@ class GsbFrais
 		DB::update($req, ['cp' => $cp, 'ville' => $ville, 'id' => $idVisiteur]);
 	}
 	/**
+	 * @author Jolan Largeteau
 	 * Récupère la liste des utilisateurs dans le même secteur que le responsable
 	 * 
 	 * @param $idResponsable
 	 */
 	public function getListVisiteurs($idResponsable)
 	{
-		$req = "SELECT nom, prenom, tra_role, tra_reg
-			FROM visiteur 
-			INNER JOIN travailler ON visiteur.id = idVisiteur 
-			INNER JOIN region ON region.id = tra_reg 
-			WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)";
-		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable]);
+		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, tra_reg, tra_date
+				FROM visiteur 
+				INNER JOIN travailler ON visiteur.id = idVisiteur 
+				INNER JOIN region ON region.id = tra_reg 
+				INNER JOIN (SELECT max(tra_date) maxdate, idVisiteur FROM travailler GROUP BY idVisiteur) t2 ON travailler.idVisiteur = t2.idVisiteur AND travailler.tra_date = t2.maxdate
+				WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)
+				AND visiteur.id != :idResponsable2
+				ORDER BY tra_role, nom, prenom";
+		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable, 'idResponsable2' => $idResponsable]);
 		return $lesLignes;
 	}
 	/**
+	 * @author Jolan Largeteau
 	 * Récupère le rôle de l'utilisateur
 	 * 
 	 * @param $idVisiteur
@@ -316,6 +321,18 @@ class GsbFrais
 		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
 		return $ligne[0];
 	}
+/**
+ * @author Jolan Largeteau
+ * Récupère toutes les infos d'un autre utilisateur
+ * 
+ * @param $idOtherUser
+ */
+	public function getOtherUser($idOtherUser) {
+		$req = "SELECT * FROM travailler INNER JOIN visiteur on visiteur.id = idVisiteur WHERE idVisiteur = :idOtherUser ORDER BY tra_date DESC LIMIT 1";
+		$ligne = DB::select($req, ['idOtherUser' => $idOtherUser]);
+		return $ligne[0];
+	}
+
 
 /**
  * @author Ruben Veloso Paulos
