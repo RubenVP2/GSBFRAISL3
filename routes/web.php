@@ -62,8 +62,16 @@ Route::post('/modifInfos', 'modifInfosController@verifInfos');
 
 Route::get('/listVisiteurs', 'listVisiteursController@listVisiteur');
 
+// Valider Frais
+Route::get('/validFrais', 'ValidFraisController@listFrais');
+
+// Voir detail pour valider frais
+Route::get('/validerDetailFrais/{mois}', 'ValidFraisController@voirDetailFrais');
+
+// Affiche la page Valider Frais avec un msg de confirmation si validation effectué
+Route::post('/validFrais', 'ValidFraisController@validerFicheFrais');
+
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
 });
-
