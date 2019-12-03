@@ -265,8 +265,8 @@ public function getInfosVisiteur($login, $mdp){
 
 	
 /**
+ * @author Ruben Veloso Paulos
  * 	Met à jour les informations saisies
- * 
  * @param $idVisiteur, $cp, $ville
  */
 	public function majInfos($idVisiteur, $cp, $ville){
@@ -275,6 +275,31 @@ public function getInfosVisiteur($login, $mdp){
 		DB::update($req, ['cp'=>$cp, 'ville'=>$ville, 'id'=>$idVisiteur]);
 
 	}
+
+/**
+ * @author Ruben Veloso Paulos
+ * Affiche les listes de frais en fonction du rôle du visiteur
+ * @param $idVisiteur
+ *@return les fiches de frais
+ */
+
+ public function getLesFicheFraisVisiteur($idVisiteur) {
+	 // Récupère le role
+	$role = $this->getVisiteurRole($idVisiteur);
+	// Test la valeur du rôle 
+	if ($role == 'Délégué') {
+		// Requête pour récupérer les visiteur pour 1 délégué
+		$req = "SELECT mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur
+		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur'";
+		$ligne = DB::select($req, ['id'=>$idVisiteur]);
+		return $ligne;
+	} else {
+		// Requête pour récupérer les visiteur pour 1 délégué
+		$req = "";
+	}
+ }
+
 }
 
 ?>
