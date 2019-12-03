@@ -279,14 +279,13 @@ class GsbFrais
 		return $ligne[0];
 	}
 
-
-	/**
-	 * 	Met à jour les informations saisies
-	 * 
-	 * @param $idVisiteur, $cp, $ville
-	 */
-	public function majInfos($idVisiteur, $cp, $ville)
-	{
+	
+/**
+ * @author Ruben Veloso Paulos
+ * 	Met à jour les informations saisies
+ * @param $idVisiteur, $cp, $ville
+ */
+	public function majInfos($idVisiteur, $cp, $ville){
 
 		$req = "update visiteur set cp = :cp, ville = :ville where id = :id";
 
@@ -297,7 +296,7 @@ class GsbFrais
 	 * 
 	 * @param $idResponsable
 	 */
-	public function getListUsers($idResponsable)
+	public function getListVisiteurs($idResponsable)
 	{
 		$req = "SELECT nom, prenom, tra_role, tra_reg
 			FROM visiteur 
@@ -305,7 +304,7 @@ class GsbFrais
 			INNER JOIN region ON region.id = tra_reg 
 			WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)";
 		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable]);
-		return $LesLignes;
+		return $lesLignes;
 	}
 	/**
 	 * Récupère le rôle de l'utilisateur
@@ -313,8 +312,33 @@ class GsbFrais
 	 * @param $idVisiteur
 	 */
 	public function getVisiteurRole($idVisiteur) {
-		$req = "SELECT tra_role FROM travailler WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
-		$lesLignes = DB::select($req, ['idVisiteur' => $idVisiteur]);
-		return $lesLignes[0];
+		$req = "SELECT tra_role as role FROM travailler WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
+		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
+		return $ligne[0];
 	}
+
+/**
+ * @author Ruben Veloso Paulos
+ * Affiche les listes de frais en fonction du rôle du visiteur
+ * @param $idVisiteur
+ *@return les fiches de frais
+ */
+
+ public function getLesFicheFraisVisiteur($idVisiteur) {
+	 // Récupère le role
+	$role = $this->getVisiteurRole($idVisiteur);
+	// Test la valeur du rôle 
+	if ($role == 'Délégué') {
+		// Requête pour récupérer les visiteur pour 1 délégué
+		$req = "SELECT mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur
+		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur'";
+		$ligne = DB::select($req, ['id'=>$idVisiteur]);
+		return $ligne;
+	} else {
+		// Requête pour récupérer les visiteur pour 1 délégué
+		$req = "";
+	}
+ }
+
 }
