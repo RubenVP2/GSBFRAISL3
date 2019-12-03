@@ -44,7 +44,8 @@
                             <li><a href="{{ url('/saisirFraisForfait') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Saisir Frais</a></li>
                             <li><a href="{{ url('/getListeFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Voir Frais</a></li>
                             <li><a href="{{ url('/modifInfos') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier les infos</a></li>
-
+                            @if (GsbFrais::getVisiteurRole(Session::get('id')) == '')
+                            <li><a href="{{ url('/modifInfos') }}" data-toggle="collapse" data-target=".navbar-collapse.in">List des visiteurs</a></li>
                         </ul>  
                         <ul class="nav navbar-nav navbar-right">                             
                             <li><a href="{{ url('/Logout') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Se déconnecter</a></li>

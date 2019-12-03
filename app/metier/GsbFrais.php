@@ -304,7 +304,8 @@ class GsbFrais
 			INNER JOIN travailler ON visiteur.id = idVisiteur 
 			INNER JOIN region ON region.id = tra_reg 
 			WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)";
-		DB::update($req, ['idResponsable' => $idResponsable]);
+		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable]);
+		return $LesLignes;
 	}
 	/**
 	 * Récupère le rôle de l'utilisateur
@@ -313,6 +314,7 @@ class GsbFrais
 	 */
 	public function getVisiteurRole($idVisiteur) {
 		$req = "SELECT tra_role FROM travailler WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
-		DB::update($req, ['idVisiteur' => $idVisiteur]);
+		$lesLignes = DB::select($req, ['idVisiteur' => $idVisiteur]);
+		return $lesLignes[0];
 	}
 }
