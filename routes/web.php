@@ -60,7 +60,7 @@ Route::get('/modifInfos', 'modifInfosController@affFormModifInfos');
 // Modifier Infos
 Route::post('/modifInfos', 'modifInfosController@verifInfos');
 
-Route::get('/listVisiteurs', 'listVisiteursController@listVisiteur');
+Route::get('/listVisiteurs', 'listVisiteursController@listVisiteurs');
 
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){

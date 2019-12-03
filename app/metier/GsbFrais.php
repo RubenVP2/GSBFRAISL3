@@ -302,8 +302,10 @@ class GsbFrais
 			FROM visiteur 
 			INNER JOIN travailler ON visiteur.id = idVisiteur 
 			INNER JOIN region ON region.id = tra_reg 
-			WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)";
-		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable]);
+			WHERE sec_code = ( SELECT sec_code FROM region INNER JOIN travailler ON region.id = travailler.tra_reg WHERE travailler.idVisiteur = :idResponsable ORDER BY tra_date DESC LIMIT 1)
+			AND visiteur.id != :idResponsable2
+			ORDER BY tra_role, nom, prenom";
+		$lesLignes = DB::select($req, ['idResponsable' => $idResponsable, 'idResponsable2' => $idResponsable]);
 		return $lesLignes;
 	}
 	/**
