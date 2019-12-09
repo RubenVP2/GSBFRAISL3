@@ -81,3 +81,9 @@ Route::post('/validFrais', 'ValidFraisController@validerFicheFrais');
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
 });
+
+// Modifier MDP
+Route::get('/modifMdp', 'modifMdpController@affFormModifInfos');
+
+// Modifier MDP
+Route::post('/modifMdp', 'modifMdpController@verifInfos');    

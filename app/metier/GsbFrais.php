@@ -19,7 +19,7 @@ class GsbFrais
 	public function getInfosVisiteur($login, $mdp)
 	{
 		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur 
-        where visiteur.login=:login and visiteur.mdp=:mdp";
+        where visiteur.login=:login and visiteur.mdp=sha1(:mdp)";
 		$ligne = DB::select($req, ['login' => $login, 'mdp' => $mdp]);
 		return $ligne;
 	}
@@ -363,12 +363,27 @@ class GsbFrais
 /**
  * @author Ravaz Victor
  * Permet de modifier sont mot de passe
- * @param $mdp
+ * @param $nMdp, $id, $oMdp
  *@return les nouveaux mots de passe
  */
- public function modifMotDePasse($mdp){
-	//Requête pour récupérer et modifier les mots de passe
-	$req ="";
+ public function modifMotDePasse($nMdp, $id, $oMdp){
+
+		//Requête pour modifier les mots de passe
+		$req ="UPDATE visiteur SET mdp = sha1(:nMdp) where id = :id and mdp = sha1(:oMdp)";
+		DB::update($req, ['nMdp' => $nMdp, 'id' => $id, 'oMdp' => $oMdp ]);
  }
+
+ 	/**
+	 * @author Victor Ravaz
+	 * Récupère le rôle de l'utilisateur
+	 * 
+	 * @param $idVisiteur
+	 */
+	public function getVisiteurRegion($idVisiteur) {
+		$req = "SELECT reg_nom as region FROM travailler inner join region on travailler.tra_reg = region.id WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
+		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
+		return $ligne[0];
+	}
+
 
 }
