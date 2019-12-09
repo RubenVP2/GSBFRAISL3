@@ -63,10 +63,13 @@ Route::post('/modifInfos', 'modifInfosController@verifInfos');
 // Liste les utilisateurs du même secteur que le responsable
 Route::get('/listVisiteurs', 'listVisiteursController@listVisiteurs');
 
+// Liste les utilisateurs du même secteur que le responsable
+Route::post('/listVisiteurs', 'listVisiteursController@listVisiteurs');
+
 // Le responsable modifi les infos d'un utilisateur de son secteur
 Route::get('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@affFormModifOtherUser');
 
-Route::post('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@verifInfos');
+Route::post('/modifOtherUser', 'modifOtherUserController@verifInfos');
 
 // Valider Frais
 Route::get('/validFrais', 'ValidFraisController@listFrais');
@@ -90,3 +93,9 @@ Route::get('/suiviPaiement/Detail/{mois}', 'SuiviPaiementController@DetailFrais'
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
 });
+
+// Modifier MDP
+Route::get('/modifMdp', 'modifMdpController@affFormModifInfos');
+
+// Modifier MDP
+Route::post('/modifMdp', 'modifMdpController@verifInfos');    

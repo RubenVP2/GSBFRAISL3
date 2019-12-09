@@ -19,7 +19,7 @@ class GsbFrais
 	public function getInfosVisiteur($login, $mdp)
 	{
 		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur 
-        where visiteur.login=:login and visiteur.mdp=:mdp";
+        where visiteur.login=:login and visiteur.mdp=sha1(:mdp)";
 		$ligne = DB::select($req, ['login' => $login, 'mdp' => $mdp]);
 		return $ligne;
 	}
@@ -279,13 +279,14 @@ class GsbFrais
 		return $ligne[0];
 	}
 
-	
-/**
- * @author Ruben Veloso Paulos
- * 	Met à jour les informations saisies
- * @param $idVisiteur, $cp, $ville
- */
-	public function majInfos($idVisiteur, $cp, $ville){
+
+	/**
+	 * @author Ruben Veloso Paulos
+	 * 	Met à jour les informations saisies
+	 * @param $idVisiteur, $cp, $ville
+	 */
+	public function majInfos($idVisiteur, $cp, $ville)
+	{
 
 		$req = "update visiteur set cp = :cp, ville = :ville where id = :id";
 
@@ -299,7 +300,7 @@ class GsbFrais
 	 */
 	public function getListVisiteurs($idResponsable)
 	{
-		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, tra_reg, tra_date
+		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, reg_nom
 				FROM visiteur 
 				INNER JOIN travailler ON visiteur.id = idVisiteur 
 				INNER JOIN region ON region.id = tra_reg 
@@ -316,21 +317,49 @@ class GsbFrais
 	 * 
 	 * @param $idVisiteur
 	 */
-	public function getVisiteurRole($idVisiteur) {
+	public function getVisiteurRole($idVisiteur)
+	{
 		$req = "SELECT tra_role as role FROM travailler WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
 		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
 		return $ligne[0];
 	}
-/**
- * @author Jolan Largeteau
- * Récupère toutes les infos d'un autre utilisateur
- * 
- * @param $idOtherUser
- */
-	public function getOtherUser($idOtherUser) {
+	/**
+	 * @author Jolan Largeteau
+	 * Récupère toutes les infos d'un autre utilisateur
+	 * 
+	 * @param $idOtherUser
+	 */
+	public function getOtherUser($idOtherUser)
+	{
 		$req = "SELECT * FROM travailler INNER JOIN visiteur on visiteur.id = idVisiteur WHERE idVisiteur = :idOtherUser ORDER BY tra_date DESC LIMIT 1";
 		$ligne = DB::select($req, ['idOtherUser' => $idOtherUser]);
 		return $ligne[0];
+	}
+	/**
+	 * @author Jolan Largeteau
+	 * Récupère la liste des régions pour le secteur que la region envoyée
+	 * 
+	 * @param $idRegion
+	 */
+	public function getOtherUserRegion($idRegion) {
+		$req = "SELECT * FROM region WHERE region.id != 'RE' AND sec_code = (SELECT sec_code FROM region WHERE id = :idRegion)";
+		$ligne = DB::select($req, ['idRegion' => $idRegion]);
+		return $ligne;
+	}
+	/**
+	 * @author Jolan Largeteau
+	 * Récupère la liste des régions pour le secteur que la region envoyée
+	 * 
+	 * @param $idRegion
+	 */
+	public function modifOtherUser($idUser, $region, $role, $date) {
+		$req = "update travailler set tra_role = :role, tra_reg = :region where idVisiteur = :idUser and tra_date = :date";
+		DB::update($req, ['role' => $role, 'region' => $region, 'idUser' => $idUser, 'date' => $date]);
+	}
+	
+	public function modifOtherUserInsert($idUser, $region, $role) {
+		$req = "insert into travailler(idVisiteur, tra_date, tra_reg, tra_role) values (:idUser,now(),:region,:role)";
+		DB::insert($req, ['idUser' => $idUser, 'region' => $region, 'role' => $role]);
 	}
 
 
@@ -363,13 +392,27 @@ class GsbFrais
 /**
  * @author Ravaz Victor
  * Permet de modifier sont mot de passe
- * @param $mdp
+ * @param $nMdp, $id, $oMdp
  *@return les nouveaux mots de passe
  */
- public function modifMotDePasse($mdp){
-	//Requête pour récupérer et modifier les mots de passe
-	$req ="";
+ public function modifMotDePasse($nMdp, $id, $oMdp){
+
+		//Requête pour modifier les mots de passe
+		$req ="UPDATE visiteur SET mdp = sha1(:nMdp) where id = :id and mdp = sha1(:oMdp)";
+		DB::update($req, ['nMdp' => $nMdp, 'id' => $id, 'oMdp' => $oMdp ]);
  }
+
+ 	/**
+	 * @author Victor Ravaz
+	 * Récupère le rôle de l'utilisateur
+	 * 
+	 * @param $idVisiteur
+	 */
+	public function getVisiteurRegion($idVisiteur) {
+		$req = "SELECT reg_nom as region FROM travailler inner join region on travailler.tra_reg = region.id WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
+		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
+		return $ligne[0];
+	}
 
 /**
  * @author Ruben Veloso Paulos

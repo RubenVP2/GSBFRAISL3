@@ -58,6 +58,7 @@
                         @if (Session::get('role') == 'Responsable')
                         <li><a href="{{ url('/listVisiteurs') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Liste des visiteurs</a></li>
                         @endif
+                        <li><a href="{{ url('/modifMdp') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier mot de passe</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{ url('/Logout') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Se déconnecter</a></li>
