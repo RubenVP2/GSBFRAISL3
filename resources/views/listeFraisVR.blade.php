@@ -13,8 +13,8 @@
         <table class="table table-bordered table-striped table-responsive">
             <thead>
                 <tr>
-                    <th style="width:14%">Nom</th>
-                    <th style="width:14%">Prénom</th>
+                    <th style="width:14%">Nom</th> 
+                    <th style="width:14%">Prénom</th> 
                     <th style="width:14%">Mois</th> 
                     <th style="width:14%">Nb justificatifs</th> 
                     <th style="width:14%">Montant valide</th> 
@@ -24,29 +24,17 @@
             </thead>
             @foreach($lesFrais as $unFrais)
             <tr>   
-                <td> {{ $unFrais->nom }} </td> 
-                <td> {{ $unFrais->prenom }} </td> 
+                <td> {{ $unFrais->nom }} </td>
+                <td> {{ $unFrais->prenom }} </td>
                 <td> {{ $unFrais->mois }} </td> 
                 <td> {{ $unFrais->nbJustificatifs }} </td> 
                 <td> {{ $unFrais->montantValide }} </td> 
                 <td> {{ $unFrais->dateModif }} </td> 
-            <td style="text-align:center;"><a href="{{ url('/validerDetailFrais') }}/{{ $unFrais->mois }}/{{ $unFrais->idVisiteur}}">
+                <td style="text-align:center;"><a href="{{ url('/suiviPaiement/Detail') }}/{{ $unFrais->mois }}">
                     <span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" data-placement="top" title="Voir"></span></a></td>
             </tr>
             @endforeach
         </table>
-    @endif
-    {{-- Si pas d'erreur et maj éffectuer --}}
-    @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
-        </div>
-    @endif
-    {{-- Si erreur --}}
-    @if (session('erreur'))
-        <div class="alert alert-danger">
-         {{ session('erreur') }}
-        </div>
     @endif
     </div>
 </div>

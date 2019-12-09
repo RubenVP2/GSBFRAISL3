@@ -63,19 +63,31 @@ Route::post('/modifInfos', 'modifInfosController@verifInfos');
 // Liste les utilisateurs du même secteur que le responsable
 Route::get('/listVisiteurs', 'listVisiteursController@listVisiteurs');
 
+// Liste les utilisateurs du même secteur que le responsable
+Route::post('/listVisiteurs', 'listVisiteursController@listVisiteurs');
+
 // Le responsable modifi les infos d'un utilisateur de son secteur
 Route::get('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@affFormModifOtherUser');
 
-Route::post('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@verifInfos');
+Route::post('/modifOtherUser', 'modifOtherUserController@verifInfos');
 
 // Valider Frais
 Route::get('/validFrais', 'ValidFraisController@listFrais');
 
-// Voir detail pour valider frais
-Route::get('/validerDetailFrais/{mois}', 'ValidFraisController@voirDetailFrais');
-
 // Affiche la page Valider Frais avec un msg de confirmation si validation effectué
 Route::post('/validFrais', 'ValidFraisController@validerFicheFrais');
+
+// Voir detail pour valider frais
+Route::get('/validerDetailFrais/{mois}/{id}', 'ValidFraisController@voirDetailFrais');
+
+// Suppression des frais hors forfait
+Route::get('/supprimerFraisHorsForfait/{idFraisH}', 'ValidFraisController@supprimerFraisHorsForfait');
+
+// Liste des fiches de frais pour le suivi du paiement
+Route::get('/suiviPaiement', 'SuiviPaiementController@listFrais');
+
+// Détail des fiches de frais Validée et Remboursée
+Route::get('/suiviPaiement/Detail/{mois}', 'SuiviPaiementController@DetailFrais');
 
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
