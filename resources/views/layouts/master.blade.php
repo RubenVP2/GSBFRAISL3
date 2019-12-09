@@ -49,6 +49,10 @@
                         @if (Session::get('role') == 'Responsable' || Session::get('role') == 'Délégué')
                         <li><a href="{{ url('/validFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Valider Frais</a></li>
                         @endif
+                        {{-- Si le role est Délégué ou responsable affiche le bouton suivre le paiement des fiches de frais --}}
+                        @if (Session::get('role') == 'Responsable' || Session::get('role') == 'Délégué')
+                        <li><a href="{{ url('/suiviPaiement') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Suivre paiement</a></li>
+                        @endif
                         <li><a href="{{ url('/modifInfos') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier les infos</a></li>
                         {{-- Si le role est responsable affiche la liste des visiteurs  --}}
                         @if (Session::get('role') == 'Responsable')

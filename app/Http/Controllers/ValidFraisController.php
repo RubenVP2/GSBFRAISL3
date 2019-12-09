@@ -24,9 +24,9 @@ class ValidFraisController extends Controller {
         $lesFrais = $frais->getLesFichesFraisVisiteur($idVisiteur, $role);
         // On affiche la liste de ces frais pour le délégué ou repsonsable
         if ($role == 'Délégué') {
-            $titreVue = "Liste des fiches pour les visiteurs";
+            $titreVue = "Liste des fiches clôturées pour les visiteurs";
         } else {
-            $titreVue = "Liste des fiches pour les délégués";
+            $titreVue = "Liste des fiches clôturées pour les délégués";
         }
              
         return view('listeFraisValid', compact('lesFrais', 'titreVue'));
@@ -37,7 +37,7 @@ class ValidFraisController extends Controller {
      * Affiche le détail (frais forfait et hors forfait)
      * @return type Vue detailFrais
      */ 
-  public function voirDetailFrais($mois){
+  public function voirDetailFrais($mois, $id){
         $gsbFrais = new GsbFrais();
         $idVisiteur = Session::get('id');
         $lesFraisForfait = $gsbFrais->getLesFraisForfait($idVisiteur, $mois);
@@ -48,7 +48,7 @@ class ValidFraisController extends Controller {
         }
         $titreVue = "Détail de la fiche de frais du mois ".$mois;
         $retour = "/validFrais";
-        return view('listeDetailFicheValid', compact('lesFraisForfait', 'lesFraisHorsForfait', 'mois', 'titreVue','montantTotal', 'retour'));
+        return view('listeDetailFicheValid', compact('lesFraisForfait', 'id', 'lesFraisHorsForfait', 'mois', 'titreVue','montantTotal', 'retour'));
     }
 
     /**
@@ -57,11 +57,25 @@ class ValidFraisController extends Controller {
      * @return type route /validFrais
      */
 
-    public function validerFicheFrais($mois) { 
-        $idVisiteur = Session::get('id');
+    public function validerFicheFrais(Request $request) { 
         $etat = 'VA';
         $gsbFrais = new GsbFrais();
+        $mois = $request->input('mois');
+        $idVisiteur = $request->input('id');
+        $gsbFrais->majEtatFicheFrais($idVisiteur, $mois, $etat);
+// Retourne à la liste des fiches cloturées 
+        return redirect('/validFrais')->with('status', 'Mise à jour effectuée!');
 
+    }
+
+    /**
+     * @author Ruben Veloso Paulos 
+     * Supprime une ligne de frais hors forfait
+     * @param $fraisHorsForfait Récupère l'id fraishorsforfait 
+     */
+    public function supprimerFraisHorsForfait($fraisHorsForfait) {
+        $gsbFrais = new GsbFrais();
+        $gsbFrais->supprimerFraisHorsForfait($fraisHorsForfait);
     }
 
 
