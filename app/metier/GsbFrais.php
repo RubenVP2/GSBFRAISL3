@@ -402,7 +402,6 @@ class GsbFrais
 		DB::update($req, ['nMdp' => $nMdp, 'id' => $id, 'oMdp' => $oMdp ]);
  }
 
-<<<<<<< HEAD
  	/**
 	 * @author Victor Ravaz
 	 * Récupère le rôle de l'utilisateur
@@ -415,7 +414,6 @@ class GsbFrais
 		return $ligne[0];
 	}
 
-=======
 /**
  * @author Ruben Veloso Paulos
  * Affiche la liste des fiches de frais à état validée ou remboursée 
@@ -441,6 +439,5 @@ public function getLesFichesFraisValidee($idVisiteur, $role) {
 		return $ligne;
 	}
 }
->>>>>>> f9481acec376cd941486f89fed8cda8187e46ae2
 
 }
