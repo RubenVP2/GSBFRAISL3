@@ -21,7 +21,12 @@ class modifOtherUserController extends Controller {
         // Récupère la liste des régions dans le même secteur que l'utilisateur
         $region = $gsbFrais->getOtherUserRegion($info->tra_reg);
         // Affiche le formulaire de modification des infos
-        return view('formModifOtherUser', compact('info', 'region', 'erreur'));
+        $roleVisiteur = Session::get('role');
+        if ($roleVisiteur == "Responsable") {
+            return view('formModifOtherUser', compact('info', 'region', 'erreur'));
+        } else {
+            return redirect('/');
+        }
     }
 
     public function verifInfos(Request $request) {
