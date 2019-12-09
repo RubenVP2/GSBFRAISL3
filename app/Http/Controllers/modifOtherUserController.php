@@ -16,25 +16,36 @@ class modifOtherUserController extends Controller {
         $erreur = "";
         $idVisiteur = Session::get('id');
         $gsbFrais = new GsbFrais();
+        // Récupère les informations de l'utilisateur sélectionné
         $info = $gsbFrais->getOtherUser($idOtherUser);
-        return view('formModifOtherUser', compact('info', 'erreur'));
+        // Récupère la liste des régions dans le même secteur que l'utilisateur
+        $region = $gsbFrais->getOtherUserRegion($info->tra_reg);
+        // Affiche le formulaire de modification des infos
+        return view('formModifOtherUser', compact('info', 'region', 'erreur'));
     }
 
     public function verifInfos(Request $request) {
-        $this->validate($request, [
-            'cp' => 'bail|required|digits:5',
-            'ville' => 'bail|required|between:2,30|alpha'
-        ]);
         // Récupérer les données pour mettre à jour la bdd
-        $adresse = $request->input('adresse');
-        $cp = $request->input('cp');
-        $ville = $request->input('ville');
-        $idVisiteur = Session::get('id');
+        $region = $request->input('region');
+        $role = $request->input('role');
+        $idUser = $request->input('idUser');
+        // Vérifie le rôle à attribué
+        if($role != "Délégué") {
+            $role = "Visiteur";
+        }
         // Appel de la fonction maj pour mettre à jour la table
         $gsbFrais = new GsbFrais();
-        $gsbFrais->majInfos($idVisiteur, $cp, $ville);
-        // Confirmer la mise à jour
-        return view('confirmModifInfos');
+        // Vérifie si une modification à déjà été faite aujourd'hui
+        if( $request->input('date') == date('Y-m-d')){
+            $gsbFrais->modifOtherUser($idUser, $region, $role, date('Y-m-d'));
+        } else {
+            $gsbFrais->modifOtherUserInsert($idUser, $region, $role);
+        }
+        // Confirmer la mise à jour et renvoie à la liste
+        $idVisiteur = Session::get('id');
+        $info = $gsbFrais->getListVisiteurs($idVisiteur);
+        $ok = true;
+        return view('listVisiteurs', compact('info', 'ok'));
     }
 
 
