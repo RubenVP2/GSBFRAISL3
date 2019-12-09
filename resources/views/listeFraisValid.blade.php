@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 <div class="container">
-    <div class="col-md-8">
+    <div class="col-md-8 well">
         <div class="blanc">
             <h2>{{$titreVue or ''}}</h2>
         </div>

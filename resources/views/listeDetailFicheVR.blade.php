@@ -1,7 +1,10 @@
 @extends('layouts.master')
 @section('content')
 <div class="container">
-    <div class="col-md-8 col-sm-8">
+    <div class='row'>
+
+    
+    <div class="col-md-12 col-sm-12 well well-md">
         <div class="blanc">
             <h2>{{$titreVue or ''}}</h2>
         </div>
@@ -47,5 +50,6 @@
             </div>           
         </div>
     </div>
+</div>
 </div>
 @stop

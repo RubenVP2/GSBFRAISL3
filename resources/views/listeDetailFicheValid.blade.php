@@ -1,7 +1,8 @@
 @extends('layouts.master')
 @section('content')
 <div class="container">
-    <div class="col-md-8 col-sm-8">
+    <div class="row">
+    <div class="col-md-12 col-sm-12 well">
         <div class="blanc">
             <h2>{{$titreVue or ''}}</h2>
         </div>
@@ -60,6 +61,7 @@
                 <a href="{{ url($retour)}}" ><button type="button" class="btn btn-default btn-danger" >Retour</button></a>                
             </div>           
         </div>
+    </div>
     </div>
 </div>
 @stop
