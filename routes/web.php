@@ -71,22 +71,40 @@ Route::get('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@affFormMod
 
 Route::post('/modifOtherUser', 'modifOtherUserController@verifInfos');
 
-// Valider Frais
+/**
+ * @author Ruben Veloso Paulos
+ * Valider Frais
+*/
 Route::get('/validFrais', 'ValidFraisController@listFrais');
 
-// Affiche la page Valider Frais avec un msg de confirmation si validation effectué
+/**
+ * @author Ruben Veloso Paulos
+ * Affiche la page Valider Frais avec un msg de confirmation si validation effectué
+*/
 Route::post('/validFrais', 'ValidFraisController@validerFicheFrais');
 
-// Voir detail pour valider frais
+/**
+ * @author Ruben Veloso Paulos
+ * Voir detail pour valider frais
+*/
 Route::get('/validerDetailFrais/{mois}/{id}', 'ValidFraisController@voirDetailFrais');
 
-// Suppression des frais hors forfait
+/**
+ * @author Ruben Veloso Paulos
+ * Suppression des frais hors forfait
+*/
 Route::get('/supprimerFraisHorsForfait/{idFraisH}', 'ValidFraisController@supprimerFraisHorsForfait');
 
-// Liste des fiches de frais pour le suivi du paiement
+/**
+ * @author Ruben Veloso Paulos
+ * Liste des fiches de frais pour le suivi du paiement
+*/
 Route::get('/suiviPaiement', 'SuiviPaiementController@listFrais');
 
-// Détail des fiches de frais Validée et Remboursée
+/**
+ * @author Ruben Veloso Paulos
+ * Détail des fiches de frais Validée et Remboursée
+*/
 Route::get('/suiviPaiement/Detail/{mois}', 'SuiviPaiementController@DetailFrais');
 
 // Retourner à une vue dont on passe le nom en paramètre

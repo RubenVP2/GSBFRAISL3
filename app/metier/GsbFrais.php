@@ -365,7 +365,7 @@ class GsbFrais
 
 /**
  * @author Ruben Veloso Paulos
- * Affiche les listes de frais en fonction du rôle du visiteur
+ * Affiche les listes de frais en fonction du rôle du visiteur connecté
  * @param $idVisiteur, $role
  * @return les fiches de frais
  */
