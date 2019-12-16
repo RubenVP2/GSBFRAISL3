@@ -376,7 +376,7 @@ class GsbFrais
 		// Requête pour récupérer les visiteur pour 1 délégué
 		$req = "SELECT f.idVisiteur, v.nom, v.prenom , mois, nbJustificatifs, montantValide, dateModif 
 		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur
-		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 4";
+		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 4 DESC";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
 	} else if ($role == 'Responsable') {
@@ -384,7 +384,7 @@ class GsbFrais
 		$req = "SELECT f.idVisiteur,  v.nom, v.prenom ,mois, nbJustificatifs, montantValide, dateModif 
 		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur inner join region r ON t.tra_reg = r.id
 		where f.idEtat like 'CL' 
-		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué' ORDER BY 1, 4";
+		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué' ORDER BY 1, 4 DESC";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
 	}
@@ -426,7 +426,7 @@ public function getLesFichesFraisValidee($idVisiteur, $role) {
 		// Requête pour récupérer les visiteur pour 1 délégué
 		$req = "SELECT f.idVisiteur, v.nom, v.prenom, mois, nbJustificatifs, montantValide, dateModif 
 		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur
-		where f.idEtat like 'VA' OR f.idEtat like 'RB' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 4";
+		where f.idEtat like 'VA' OR f.idEtat like 'RB' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 4 DESC";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
 	} else if ($role == 'Responsable') {
@@ -434,7 +434,7 @@ public function getLesFichesFraisValidee($idVisiteur, $role) {
 		$req = "SELECT f.idVisiteur, v.nom, v.prenom, mois, nbJustificatifs, montantValide, dateModif 
 		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur inner join region r ON t.tra_reg = r.id
 		where f.idEtat like 'VA' OR f.idEtat like 'RB'
-		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué' ORDER BY 1, 4";
+		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué' ORDER BY 1, 4 DESC";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
 	}
