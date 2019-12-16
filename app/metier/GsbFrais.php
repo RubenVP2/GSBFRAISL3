@@ -70,7 +70,7 @@ class GsbFrais
 	 */
 	public function getLesIdFrais()
 	{
-		$req = "select fraisforfait.id as idfrais from fraisforfait order by fraisforfait.id";
+		$req = "select fraisforfait.id as idfrais, montant from fraisforfait order by fraisforfait.id";
 		$lesLignes = DB::select($req);
 		return $lesLignes;
 	}
@@ -404,7 +404,7 @@ class GsbFrais
 
  	/**
 	 * @author Victor Ravaz
-	 * Récupère le rôle de l'utilisateur
+	 * Récupère la region de l'utilisateur
 	 * 
 	 * @param $idVisiteur
 	 */

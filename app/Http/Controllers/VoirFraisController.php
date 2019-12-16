@@ -43,12 +43,20 @@ class VoirFraisController extends Controller
       $idVisiteur = Session::get('id');
       $lesFraisForfait = $gsbFrais->getLesFraisForfait($idVisiteur, $mois);
       $lesFraisHorsForfait = $gsbFrais->getLesFraisHorsForfait($idVisiteur, $mois);
+      $FraisForfait = $gsbFrais->getLesIdFrais();
       $montantTotal = 0;
+      $i = 0;
+
+      foreach($lesFraisForfait as $ff){
+        $montantTotal = $montantTotal + $ff->quantite * $FraisForfait[$i]->montant;
+        $i++;
+      }
+
       foreach ($lesFraisHorsForfait as $fhf){
             $montantTotal = $montantTotal + $fhf->montant;
       }
       $titreVue = "Détail de la fiche de frais du mois ".$mois;
       $retour = "/getListeFrais";
-      return view('listeDetailFiche', compact('lesFraisForfait', 'lesFraisHorsForfait', 'mois', 'titreVue','montantTotal', 'retour'));
+      return view('listeDetailFiche', compact('lesFraisForfait', 'lesFraisHorsForfait', 'mois', 'titreVue','montantTotal','montantTotalFF', 'retour'));
   }
 }
