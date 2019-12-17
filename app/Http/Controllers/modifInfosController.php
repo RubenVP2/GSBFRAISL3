@@ -23,19 +23,30 @@ class modifInfosController extends Controller {
     public function verifInfos(Request $request) {
         $this->validate($request, [
             'cp' => 'bail|required|digits:5',
-            'ville' => 'bail|required|between:2,30|alpha'
+            'ville' => 'bail|required|between:2,30|alpha',
+            'tel' => 'bail|required|between:10,12',
+            'mail' => 'bail|required|between:2, 30'
         ]);
         // Récupérer les données pour mettre à jour la bdd
         $adresse = $request->input('adresse');
         $cp = $request->input('cp');
         $ville = $request->input('ville');
+        $tel = $request->input('tel');
+        $mail = $request->input('mail');
         $idVisiteur = Session::get('id');
+
         // Appel de la fonction maj pour mettre à jour la table
         $gsbFrais = new GsbFrais();
-        $gsbFrais->majInfos($idVisiteur, $cp, $ville);
+        $gsbFrais->majInfos($idVisiteur, $cp, $ville, $tel, $mail);
         // Confirmer la mise à jour
         return view('confirmModifInfos');
     }
+
+
+  
+
+
+
 
 
 }

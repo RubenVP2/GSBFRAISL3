@@ -1,5 +1,15 @@
 @extends('layouts.master')
 @section('content')
+<<<<<<< HEAD
+{!! Form::open(['url' => 'modifInfos']) !!}  
+<div class="col-md-12 well well-md">
+    <h2>Modification des informations de {{ $info->nom }} {{ $info->prenom }}</h2>
+
+</div>
+{!! Form::close() !!}
+@stop
+
+=======
 {!! Form::open(['url' => 'modifOtherUser']) !!}
 <div class="col-md-12 well well-md">
     <h2>Modification des informations de {{ $info->nom }} {{ $info->prenom }}</h2>
@@ -30,3 +40,4 @@
 </div>
 {!! Form::close() !!}
 @stop
+>>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84

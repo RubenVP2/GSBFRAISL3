@@ -11,14 +11,28 @@
                 <tr>
                     <th>id</th> 
                     <th>Quantité</th>  
+<<<<<<< HEAD
+=======
+                     
+>>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
                 </tr>
             </thead>
             @foreach($lesFraisForfait as $unFF)
             <tr>   
                 <td> {{ $unFF->idfrais }} </td> 
                 <td> {{ $unFF->quantite }} </td> 
+<<<<<<< HEAD
             </tr>
             @endforeach
+=======
+                
+            </tr>
+            @endforeach
+            <tr>
+                <td style="text-align: right"> Montant total :</td>
+                <td>{{$montantTotal}}</td>
+            </tr>
+>>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
         </table>
         <h3>Liste des frais hors forfait</h3>
         <table class="table table-bordered table-striped table-responsive">

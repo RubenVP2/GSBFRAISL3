@@ -27,11 +27,24 @@ class modifMdpController extends Controller
         $nMdp = $request->input('nMdp');
         $n2Mdp = $request->input('n2Mdp');
 
+
         $gsbFrais = new GsbFrais();
         $idVisiteur = Session::get('id');
 
         if ($nMdp == $n2Mdp) {
             $gsbFrais->modifMotDePasse($nMdp, $idVisiteur, $oMdp);
+        } else {
+            $erreur = "";
+            $info = 1;
+            return view('formModifMdp', compact('info', 'erreur'));
+        }
+
+        if ($oMdp == $nMdp) {
+            $gsbFrais->modifMotDePasse($nMdp, $idVisiteur, $oMdp);
+        } else {
+            $erreur = "";
+            $info = 2;
+            return view('formModifMdp', compact('info', 'erreur'));
         }
 
         return view('confirmModifInfos');

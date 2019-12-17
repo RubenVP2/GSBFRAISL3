@@ -4,7 +4,13 @@
 <div class="col-md-12 well well-md">
     <h2>Modification de votre mot de passe </h2>
     <div class="form-horizontal">    
-
+        @if(is_int($info)&&$info==1)
+        <h4 class="text-danger">Les nouveaux mots de passe ne correspondent pas !</h4>
+        @endif
+        @if(is_int($info)&&$info==2)
+        <h4 class="text-danger">L'ancien mots de passe et le nouveau mot de passe sont identiques !</h4>
+        @endif
+       
         <div class="form-group">
             <label class="col-md-4 control-label">Votre ancien mot de passe : </label>
             <div class="col-md-6 col-md-3">
@@ -41,6 +47,7 @@
         <div class="form-group">
             <div class="col-md-6 col-md-offset-3">
                 <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-log-in"></span> Valider</button>
+                <a href="{{ url('/') }}" class="btn btn-default btn-danger"><span class="glyphicon glyphicon-log-in"></span> Retour</a>
             </div>
         </div>
   @if (session('erreur'))
