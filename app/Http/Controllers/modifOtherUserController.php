@@ -16,27 +16,6 @@ class modifOtherUserController extends Controller {
         $erreur = "";
         $idVisiteur = Session::get('id');
         $gsbFrais = new GsbFrais();
-<<<<<<< HEAD
-        $info = $gsbFrais->getOtherUser($idOtherUser);
-        return view('formModifOtherUser', compact('info', 'erreur'));
-    }
-
-    public function verifInfos(Request $request) {
-        $this->validate($request, [
-            'cp' => 'bail|required|digits:5',
-            'ville' => 'bail|required|between:2,30|alpha'
-        ]);
-        // Récupérer les données pour mettre à jour la bdd
-        $adresse = $request->input('adresse');
-        $cp = $request->input('cp');
-        $ville = $request->input('ville');
-        $idVisiteur = Session::get('id');
-        // Appel de la fonction maj pour mettre à jour la table
-        $gsbFrais = new GsbFrais();
-        $gsbFrais->majInfos($idVisiteur, $cp, $ville);
-        // Confirmer la mise à jour
-        return view('confirmModifInfos');
-=======
         // Récupère les informations de l'utilisateur sélectionné
         $info = $gsbFrais->getOtherUser($idOtherUser);
         // Récupère la liste des régions dans le même secteur que l'utilisateur
@@ -72,7 +51,6 @@ class modifOtherUserController extends Controller {
         $info = $gsbFrais->getListVisiteurs($idVisiteur);
         $ok = true;
         return view('listVisiteurs', compact('info', 'ok'));
->>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
     }
 
 
