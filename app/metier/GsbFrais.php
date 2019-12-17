@@ -326,9 +326,8 @@ public function AffichageRole(){
 
 public function addTravail($id,$tra_reg,$tra_role)
 {
-
-	$req = "insert into visiteur( `id`,`tra_date`, `tra_reg`,`tra_role`) 
-	values(:id,now(),:tra_reg,tra_role) inner join id.visiteur= id.travailler where visiteur.id=:id" ;
+	$req = "insert into travailler( `idVisiteur`,`tra_date`, `tra_reg`,`tra_role`) 
+	values(:idVisiteur,now(),:tra_reg,tra_role)" ;
 	DB::insert($req, ['id' => $id, 'tra_reg' => $tra_reg, 'tra_role' => $tra_role]);
 }
 

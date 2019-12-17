@@ -8,11 +8,12 @@
     <div class="form-group">
             <label class="col-md-3 control-label">Id : </label>
             <div class="col-md-6 col-md-3">
-                 <input type="text" name="id" ng-model="id" class="form-control" placeholder="Votre ID" size ="4"  value="" required> 
+                 <input type="text" name="id" ng-model="id" class="form-control" placeholder="Votre ID" size ="4"  value="" required> Ce dernier doit contenir une lettre et maximum deux chiffres , comme par exemple : 'f45'
                  @if($errors->has('id'))
                  <div class="alert alert-danger">
                      {{ $errors->first('id') }}
                  </div>
+
                   @endif
             </div>
         </div>
@@ -121,7 +122,7 @@
            </div><div class="form-group">
             <label class="col-md-3 control-label">Votre rôle de travail :</label>
             <div class="col-md-6 col-md-3">
-                        <select name="tra_reg">
+                        <select name="tra_role">
                         @foreach($result2 as $oneResult)
                             <option value="{{ $oneResult->tra_role }}" >{{ $oneResult->tra_role }}</option>
                         @endforeach

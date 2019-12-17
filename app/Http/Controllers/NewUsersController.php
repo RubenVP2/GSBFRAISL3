@@ -28,29 +28,25 @@ class NewUsersController extends Controller {
         $nom = $request->input('nom');
         $prenom = $request->input('prenom');
         $mdp = $request->input('mdp');
-        $reg_nom =  $request->input('reg_nom') ;
+        $reg_nom =  $request->input('tra_reg') ;
         $tra_role = $request->input('tra_role');
-        $login = strtoupper($prenom[0] , $nom);
+        $login =  $request->input('login');
         $ville = $request->input('ville');
         $adresse = $request->input('adresse');
         $cp = $request->input('cp');
         $dateEmbauche = $request->input('dateEmbauche');
         $mail = $request->input('mail');
-        $tel = $request->input('tel');
-        
+        $tel = $request->input('tel');  
         $id = $request->input('id');
-        $logina = $prenom[0] . $nom;
-        Session::put ('login',$logina);
-
-
+ 
 
 
         // Appel de la fonction maj pour mettre à jour la table avec le nouvel utilisateurs
         $gsbFrais = new GsbFrais();
         $gsbFrais->addUsers($id,$nom,$prenom,$mdp,$login,$adresse,$cp,$dateEmbauche,$mail,$tel);
-        $gsbFrais->addTravail($id,now(),$reg_nom,$tra_role);
+        $gsbFrais->addTravail($id,$reg_nom,$tra_role);
         // Confirmer la mise à jour
-        return view('confirmModifInfos');
+        return view('confirmNewUser');
     }
 
 }
