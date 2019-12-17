@@ -1,7 +1,10 @@
 @extends('layouts.master')
 @section('content')
 <div class="container">
-    <div class="col-md-8 col-sm-8">
+    <div class='row'>
+
+    
+    <div class="col-md-12 col-sm-12 well well-md">
         <div class="blanc">
             <h2>{{$titreVue or ''}}</h2>
         </div>
@@ -11,28 +14,14 @@
                 <tr>
                     <th>id</th> 
                     <th>Quantité</th>  
-<<<<<<< HEAD
-=======
-                     
->>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
                 </tr>
             </thead>
             @foreach($lesFraisForfait as $unFF)
             <tr>   
                 <td> {{ $unFF->idfrais }} </td> 
                 <td> {{ $unFF->quantite }} </td> 
-<<<<<<< HEAD
             </tr>
             @endforeach
-=======
-                
-            </tr>
-            @endforeach
-            <tr>
-                <td style="text-align: right"> Montant total :</td>
-                <td>{{$montantTotal}}</td>
-            </tr>
->>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
         </table>
         <h3>Liste des frais hors forfait</h3>
         <table class="table table-bordered table-striped table-responsive">
@@ -47,24 +36,20 @@
             <tr>   
                 <td> {{ $unFHF->libelle }} </td> 
                 <td> {{ $unFHF->date }} </td> 
-                <td> {{ $unFHF->montant }} </td>                 
-            </tr>
+                <td> {{ $unFHF->montant }} </td>
             @endforeach
             <tr>
                 <td style="text-align: right"> Montant total :</td>
+                <td></td>
                 <td>{{$montantTotal}}</td>
             </tr>
         </table>
-        <div class="form-group">
-            <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
-                <a href="{{ url($retour)}}" ><button type="button" class="btn btn-default btn-primary" >Retour</button></a>                
+        <div class='row'>
+            <div class="col-md-3 col-sm-3">
+                <a href="{{ url($retour)}}" ><button type="button" class="btn btn-default btn-danger" >Retour</button></a>                
             </div>           
-        </div>  
-        @if (session('erreur'))
-        <div class="alert alert-danger">
-         {{ session('erreur') }}
         </div>
-  @endif
     </div>
+</div>
 </div>
 @stop

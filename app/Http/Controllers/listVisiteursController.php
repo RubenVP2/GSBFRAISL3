@@ -6,19 +6,24 @@ use Illuminate\http\Request;
 use Illuminate\Support\Facades\Session;
 use App\metier\GsbFrais;
 
-class listVisiteursController extends Controller {
+class listVisiteursController extends Controller
+{
 
     /**
      * Initialise le formulaire avec les infos personnelles
      * @return vue listVisiteur
      */
-    public function listVisiteurs() {
+    public function listVisiteurs()
+    {
         $erreur = "";
         $idVisiteur = Session::get('id');
         $gsbFrais = new GsbFrais();
         $info = $gsbFrais->getListVisiteurs($idVisiteur);
-        return view('listVisiteurs', compact('info', 'erreur'));
+        $roleVisiteur = Session::get('role');
+        if ($roleVisiteur == "Responsable") {
+            return view('listVisiteurs', compact('info', 'erreur'));
+        } else {
+            return redirect('/');
+        }
     }
-
-
 }

@@ -19,7 +19,7 @@ class GsbFrais
 	public function getInfosVisiteur($login, $mdp)
 	{
 		$req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur 
-        where visiteur.login=:login and visiteur.mdp=:mdp";
+        where visiteur.login=:login and visiteur.mdp=sha1(:mdp)";
 		$ligne = DB::select($req, ['login' => $login, 'mdp' => $mdp]);
 		return $ligne;
 	}
@@ -70,7 +70,7 @@ class GsbFrais
 	 */
 	public function getLesIdFrais()
 	{
-		$req = "select fraisforfait.id as idfrais from fraisforfait order by fraisforfait.id";
+		$req = "select fraisforfait.id as idfrais, montant from fraisforfait order by fraisforfait.id";
 		$lesLignes = DB::select($req);
 		return $lesLignes;
 	}
@@ -274,7 +274,7 @@ class GsbFrais
 	 */
 	public function getInfosPerso($id)
 	{
-		$req = "select cp, ville, mail, tel from visiteur where visiteur.id=:id";
+		$req = "select cp, ville from visiteur where visiteur.id=:id";
 		$ligne = DB::select($req, ['id' => $id]);
 		return $ligne[0];
 	}
@@ -309,12 +309,25 @@ public function addUsers($id,$nom,$prenom,$mdp,$login,$adresse,$cp,$dateEmbauche
 	DB::insert($req, ['id' => $id, 'nom' => $nom, 'prenom' => $prenom, 'mdp' => $mdp, 'login' => $login,'adresse' => $adresse,'cp' => $cp,'dateEmbauche' => $dateEmbauche,'mail' => $mail,'tel' => $tel,]);
 }
  
+/**
+ * @author Chikh Nawfel
+ *
+ *Affiche la région pour une selection
+ * @param 
+ */
+
 
 public function AffichageRegion(){
 	$req = "select reg_nom from region ";
 	$result = DB::select($req);
 	return $result;
 }
+/**
+ * @author Chikh Nawfel
+ *
+ * Affiche les roles disponibles
+ * @param 
+ */
 
 public function AffichageRole(){
 	$req = "select DISTINCT tra_role from travailler ";
@@ -323,6 +336,12 @@ public function AffichageRole(){
 }
 
 
+/**
+ * @author Chikh Nawfel
+ *
+ * Ajoute un chapmp de travail
+ * @param 
+ */
 
 public function addTravail($id,$tra_reg,$tra_role)
 {
@@ -330,6 +349,13 @@ public function addTravail($id,$tra_reg,$tra_role)
 	values(:idVisiteur,now(),:tra_reg,tra_role)" ;
 	DB::insert($req, ['id' => $id, 'tra_reg' => $tra_reg, 'tra_role' => $tra_role]);
 }
+
+/**
+ * @author Chikh Nawfel
+ *
+ * Fabrication d'un nouvel mdp générer automatiquement
+ * @param 
+ */
 
 
 public function NewMdp($size){
@@ -346,7 +372,7 @@ public function NewMdp($size){
 	return $mdp;
 
 }
-/////////////////////////////////////////
+
 
 /*
 public function secteur($numSecteur){
@@ -362,7 +388,7 @@ select * from where secteur = ;
 	 */
 	public function getListVisiteurs($idResponsable)
 	{
-		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, tra_reg, tra_date
+		$req = "SELECT visiteur.id as id, nom, prenom, tra_role, reg_nom
 				FROM visiteur 
 				INNER JOIN travailler ON visiteur.id = idVisiteur 
 				INNER JOIN region ON region.id = tra_reg 
@@ -379,28 +405,56 @@ select * from where secteur = ;
 	 * 
 	 * @param $idVisiteur
 	 */
-	public function getVisiteurRole($idVisiteur) {
+	public function getVisiteurRole($idVisiteur)
+	{
 		$req = "SELECT tra_role as role FROM travailler WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
 		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
 		return $ligne[0];
 	}
-/**
- * @author Jolan Largeteau
- * Récupère toutes les infos d'un autre utilisateur
- * 
- * @param $idOtherUser
- */
-	public function getOtherUser($idOtherUser) {
+	/**
+	 * @author Jolan Largeteau
+	 * Récupère toutes les infos d'un autre utilisateur
+	 * 
+	 * @param $idOtherUser
+	 */
+	public function getOtherUser($idOtherUser)
+	{
 		$req = "SELECT * FROM travailler INNER JOIN visiteur on visiteur.id = idVisiteur WHERE idVisiteur = :idOtherUser ORDER BY tra_date DESC LIMIT 1";
 		$ligne = DB::select($req, ['idOtherUser' => $idOtherUser]);
 		return $ligne[0];
+	}
+	/**
+	 * @author Jolan Largeteau
+	 * Récupère la liste des régions pour le secteur que la region envoyée
+	 * 
+	 * @param $idRegion
+	 */
+	public function getOtherUserRegion($idRegion) {
+		$req = "SELECT * FROM region WHERE region.id != 'RE' AND sec_code = (SELECT sec_code FROM region WHERE id = :idRegion)";
+		$ligne = DB::select($req, ['idRegion' => $idRegion]);
+		return $ligne;
+	}
+	/**
+	 * @author Jolan Largeteau
+	 * Récupère la liste des régions pour le secteur que la region envoyée
+	 * 
+	 * @param $idRegion
+	 */
+	public function modifOtherUser($idUser, $region, $role, $date) {
+		$req = "update travailler set tra_role = :role, tra_reg = :region where idVisiteur = :idUser and tra_date = :date";
+		DB::update($req, ['role' => $role, 'region' => $region, 'idUser' => $idUser, 'date' => $date]);
+	}
+	
+	public function modifOtherUserInsert($idUser, $region, $role) {
+		$req = "insert into travailler(idVisiteur, tra_date, tra_reg, tra_role) values (:idUser,now(),:region,:role)";
+		DB::insert($req, ['idUser' => $idUser, 'region' => $region, 'role' => $role]);
 	}
 
 
 /**
  * @author Ruben Veloso Paulos
- * Affiche les listes de frais en fonction du rôle du visiteur
- * @param $idVisiteur
+ * Affiche les listes de frais en fonction du rôle du visiteur connecté
+ * @param $idVisiteur, $role
  * @return les fiches de frais
  */
 
@@ -408,17 +462,17 @@ select * from where secteur = ;
 	// Test la valeur du rôle 
 	if ($role == 'Délégué') {
 		// Requête pour récupérer les visiteur pour 1 délégué
-		$req = "SELECT f.idVisiteur, mois, nbJustificatifs, montantValide, dateModif 
-		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur
-		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 2";
+		$req = "SELECT f.idVisiteur, v.nom, v.prenom , mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur
+		where f.idEtat like 'CL' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 4 DESC";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
 	} else if ($role == 'Responsable') {
 		// Requête pour récupérer les visiteur pour 1 délégué
-		$req = "SELECT f.idVisiteur, mois, nbJustificatifs, montantValide, dateModif 
-		from fichefrais f inner join travailler t on f.idVisiteur = t.idVisiteur inner join region r ON t.tra_reg = r.id
+		$req = "SELECT f.idVisiteur,  v.nom, v.prenom ,mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur inner join region r ON t.tra_reg = r.id
 		where f.idEtat like 'CL' 
-		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué'";
+		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué' ORDER BY 1, 4 DESC";
 		$ligne = DB::select($req, ['id'=>$idVisiteur]);
 		return $ligne;
 	}
@@ -426,12 +480,52 @@ select * from where secteur = ;
 /**
  * @author Ravaz Victor
  * Permet de modifier sont mot de passe
- * @param $mdp
+ * @param $nMdp, $id, $oMdp
  *@return les nouveaux mots de passe
  */
- public function modifMotDePasse($mdp){
-	//Requête pour récupérer et modifier les mots de passe
-	$req ="";
+ public function modifMotDePasse($nMdp, $id, $oMdp){
+
+		//Requête pour modifier les mots de passe
+		$req ="UPDATE visiteur SET mdp = sha1(:nMdp) where id = :id and mdp = sha1(:oMdp)";
+		DB::update($req, ['nMdp' => $nMdp, 'id' => $id, 'oMdp' => $oMdp ]);
  }
+
+ 	/**
+	 * @author Victor Ravaz
+	 * Récupère la region de l'utilisateur
+	 * 
+	 * @param $idVisiteur
+	 */
+	public function getVisiteurRegion($idVisiteur) {
+		$req = "SELECT reg_nom as region FROM travailler inner join region on travailler.tra_reg = region.id WHERE idVisiteur = :idVisiteur ORDER BY tra_date DESC LIMIT 1";
+		$ligne = DB::select($req, ['idVisiteur' => $idVisiteur]);
+		return $ligne[0];
+	}
+
+/**
+ * @author Ruben Veloso Paulos
+ * Affiche la liste des fiches de frais à état validée ou remboursée 
+ * @param $idVisiteur, $role
+ * @return les fiches de frais
+ */
+public function getLesFichesFraisValidee($idVisiteur, $role) {
+	// Test la valeur du rôle 
+	if ($role == 'Délégué') {
+		// Requête pour récupérer les visiteur pour 1 délégué
+		$req = "SELECT f.idVisiteur, v.nom, v.prenom, mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur
+		where f.idEtat like 'VA' OR f.idEtat like 'RB' AND t.tra_reg = ANY (SELECT tra_reg from travailler where idVisiteur = :id)  AND t.tra_role like 'visiteur' ORDER BY 1, 4 DESC";
+		$ligne = DB::select($req, ['id'=>$idVisiteur]);
+		return $ligne;
+	} else if ($role == 'Responsable') {
+		// Requête pour récupérer les visiteur pour 1 délégué
+		$req = "SELECT f.idVisiteur, v.nom, v.prenom, mois, nbJustificatifs, montantValide, dateModif 
+		from fichefrais f inner join visiteur v on f.idVisiteur = v.id inner join travailler t on f.idVisiteur = t.idVisiteur inner join region r ON t.tra_reg = r.id
+		where f.idEtat like 'VA' OR f.idEtat like 'RB'
+		AND r.sec_code = ANY (SELECT r.sec_code from travailler t INNER JOIN region r ON t.tra_reg = r.id where t.idVisiteur = :id) AND t.tra_role like 'Délégué' ORDER BY 1, 4 DESC";
+		$ligne = DB::select($req, ['id'=>$idVisiteur]);
+		return $ligne;
+	}
+}
 
 }

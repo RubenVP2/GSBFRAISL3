@@ -26,6 +26,14 @@
             </tr>
             @endforeach
         </table>
+<<<<<<< HEAD
+=======
+    @if (session('status'))
+        <div class="alert alert-success">
+         {{ session('status') }}
+        </div>
+    @endif
+>>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
     @if (session('erreur'))
         <div class="alert alert-danger">
          {{ session('erreur') }}

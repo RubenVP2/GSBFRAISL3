@@ -60,34 +60,81 @@ Route::get('/modifInfos', 'modifInfosController@affFormModifInfos');
 // Modifier Infos
 Route::post('/modifInfos', 'modifInfosController@verifInfos');
 
-
- // Ajouter Visiteur
-Route::get('/newVisiteur', 'NewUsersController@affFormModifInfos');
-
-// Ajouter un Visiteur
-Route::post('/newVisiteur', 'NewUsersController@verifInfos');
-
-
-
-
 // Liste les utilisateurs du même secteur que le responsable
 Route::get('/listVisiteurs', 'listVisiteursController@listVisiteurs');
+
+// Liste les utilisateurs du même secteur que le responsable
+Route::post('/listVisiteurs', 'listVisiteursController@listVisiteurs');
 
 // Le responsable modifi les infos d'un utilisateur de son secteur
 Route::get('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@affFormModifOtherUser');
 
-Route::post('/modifOtherUser/{idOtherUser}', 'modifOtherUserController@verifInfos');
+Route::post('/modifOtherUser', 'modifOtherUserController@verifInfos');
 
-// Valider Frais
+/**
+ * @author Chikh Nawfel
+ * Ajout Visiteur
+*/
+
+
+ // Ajouter Visiteur
+ Route::get('/newVisiteur', 'NewUsersController@affFormModifInfos');
+
+
+ /**
+ * @author Chikh Nawfel
+ * Ajout Visiteur
+*/
+
+
+ // Ajouter un Visiteur
+ Route::post('/newVisiteur', 'NewUsersController@verifInfos');
+ 
+ 
+
+/**
+ * @author Ruben Veloso Paulos
+ * Valider Frais
+*/
 Route::get('/validFrais', 'ValidFraisController@listFrais');
 
-// Voir detail pour valider frais
-Route::get('/validerDetailFrais/{mois}', 'ValidFraisController@voirDetailFrais');
-
-// Affiche la page Valider Frais avec un msg de confirmation si validation effectué
+/**
+ * @author Ruben Veloso Paulos
+ * Affiche la page Valider Frais avec un msg de confirmation si validation effectué
+*/
 Route::post('/validFrais', 'ValidFraisController@validerFicheFrais');
+
+/**
+ * @author Ruben Veloso Paulos
+ * Voir detail pour valider frais
+*/
+Route::get('/validerDetailFrais/{mois}/{id}', 'ValidFraisController@voirDetailFrais');
+
+/**
+ * @author Ruben Veloso Paulos
+ * Suppression des frais hors forfait
+*/
+Route::get('/supprimerFraisHorsForfait/{idFraisH}', 'ValidFraisController@supprimerFraisHorsForfait');
+
+/**
+ * @author Ruben Veloso Paulos
+ * Liste des fiches de frais pour le suivi du paiement
+*/
+Route::get('/suiviPaiement', 'SuiviPaiementController@listFrais');
+
+/**
+ * @author Ruben Veloso Paulos
+ * Détail des fiches de frais Validée et Remboursée
+*/
+Route::get('/suiviPaiement/Detail/{mois}', 'SuiviPaiementController@DetailFrais');
 
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
 });
+
+// Modifier MDP
+Route::get('/modifMdp', 'modifMdpController@affFormModifInfos');
+
+// Modifier MDP
+Route::post('/modifMdp', 'modifMdpController@verifInfos');    

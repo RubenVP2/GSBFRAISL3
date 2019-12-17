@@ -49,12 +49,24 @@
                         @if (Session::get('role') == 'Responsable' || Session::get('role') == 'Délégué')
                         <li><a href="{{ url('/validFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Valider Frais</a></li>
                         @endif
+<<<<<<< HEAD
                         <li><a href="{{ url('/modifInfos') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier les infos</a></li>
                         <li><a href="{{ url('/newVisiteur') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Créer un nouvel utilisateur</a></li>
+=======
+                        {{-- Si le role est Délégué ou responsable affiche le bouton suivre le paiement des fiches de frais --}}
+                        @if (Session::get('role') == 'Responsable' || Session::get('role') == 'Délégué')
+                        <li><a href="{{ url('/suiviPaiement') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Suivre paiement</a></li>
+                        @endif
+                        <li><a href="{{ url('/modifInfos') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier les infos</a></li>
+>>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
                         {{-- Si le role est responsable affiche la liste des visiteurs  --}}
                         @if (Session::get('role') == 'Responsable')
                         <li><a href="{{ url('/listVisiteurs') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Liste des visiteurs</a></li>
                         @endif
+<<<<<<< HEAD
+=======
+                        <li><a href="{{ url('/modifMdp') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier mot de passe</a></li>
+>>>>>>> 8aede1283be9efcaa9a743b407dd232867105c84
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{ url('/Logout') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Se déconnecter</a></li>
